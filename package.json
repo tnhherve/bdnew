@@ -1,0 +1,18 @@
+{
+  "name": "facturation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "admin-lte-express": "^1.4.2",
+    "bootstrap": "^4.2.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.10",
+    "nunjucks": "^3.1.7"
+  }
+}
