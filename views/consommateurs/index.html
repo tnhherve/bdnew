@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Consommateur</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Liste Consommateur</li>
+                </ol>
+            </nav>
+              
+        </div>
+    <div class="col-md-12" style="margin-top: 10px;"> 
+        <h2>Liste des consommateurs</h2>
+        <table class="table table-striped table-hover">
+            <thead >
+                <tr>
+                    <th>Nom</th>
+                    <th>E-mail</th>
+                    <th>Téléphone</th>
+                    <th>Nombre</th>
+                    <th>Etat</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in conso %}
+                <tr>
+                    <td>{{c.nom_consommateur}}</td>
+                    <td>{{c.email_consommateur}}</td>
+                    <td>{{c.telephone_consommateur}}</td>
+                    <td>{{c.nbre}}</td>
+                    <td>{{c.etat}}</td>
+                    
+                    <td><a href="/conso/delete/{{c._id}}"><span data-feather="trash-2"></a></td>
+                    <td><a href="/conso/edit/{{c._id}}"><span data-feather="edit-2"></a></td>    
+                </tr>    
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        
+    </div>
+</main>        
+{% endblock %}

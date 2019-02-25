@@ -1,0 +1,76 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Facture</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{action}} Facture</li>
+            </ol>
+        </nav>
+          
+    </div>
+
+    <div class="col-md-12" style="margin-top: 10px;">    
+        <form action="{{endpoint}}" method="POST">
+                <p>{{endpoint}}</p>
+            <div class="form-group">
+                <label for='periode'>Période</label>
+                <select name='periode' class="form-control" required>
+                    <option value=' disabled selected='>Choisissez de la période</option>
+                    <option value='Janvier-Fevrier'>Janvier-Fevrier</option>
+                    <option value='Fevrier-Mars'>Fevrier-Mars</option>
+                    <option value='Mars-Avril'>Mars-Avrilr</option>
+                    <option value='Avril-Mai'>Avril-Mai</option>
+                    <option value='Mai-Juin'>Mai-Juin</option>
+                    <option value='Juin-Juillet'>Juin-Juillet</option>
+                    <option value='Juillet-Août'>Juillet-Août</option>
+                    <option value='Août-Septembre'>Août-Septembre</option>
+                    <option value='Septembre-Octobre'>Septembre-Octobre</option>
+                    <option value='Octobre-Novembre'>Octobre-Novembre</option>
+                    <option value='Novembre-Decembre'>Novembre-Decembre</option>
+                    <option value='Decembre-Janvier'>Decembre-Janvier</option>
+                </select>        
+            </div>
+            <div class="form-group">
+                <label for="montant">Montant</label>
+                <input type="number" name="montant" value="{{facture.montant_facture}}"placeholder='1000.00' step='0.01' min='500' max='80 000' id='montant' required='' class="form-control">
+            </div>
+        
+            <div class="form-group">
+                <label for="type_facture">Type Facture</label>
+                <select name="type_facture" id="type" class="form-control" required>
+                    {% if facture.type_facture == "electricite" %}
+                        <option value="{{facture.type_facture}}">{{facture.type_facture}}</option>
+                        <option value="eau">Eau</option>
+                    {% elif facture.type_facture == "eau" %}
+                        <option value="{{facture.type_facture}}">{{facture.type_facture}}</option>
+                        <option value="electricite">Electricite</option>
+                    {% else %}
+                        <option selected>Choisissez le type de facture</option>
+                        <option value="electricite">Electricité</option>
+                        <option value="eau">Eau</option>
+                    {% endif %}
+                    
+                </select>
+            </div>
+            <div style="display:none" id="pk">
+                <div class="form-group">
+                    <label for="prix_kwh">Prix du KWH</label>
+                    <input type="number" name="prix_kwh" id="prix_kwh"placeholder='5.0' step='0.01' min='5.00' max='1000.00'  value="{{facture.prix_kwh}}" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="date_limite">Date Limite</label>
+                <input type="date" name="date_limite" value="{{facture.date_limite}}" id="date_limite" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>    
+        </form>
+    </div>
+    <script src="/style/js/facture.js"></script>
+</main>        
+{% endblock %}

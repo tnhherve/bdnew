@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Indexes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">edit</li>
+            </ol>
+        </nav> 
+    </div>
+
+    <div class="col-md-12" style="margin-top: 10px;">    
+        <form action="{{endpoint}}" method="post">
+            <div class="form-group">
+                <label for='name'>Nom</label>
+                <input type="text" name="name" value="{{index.id_consommateur.nom_consommateur}}" id="ancien" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for='ancien'>Ancien Indexe</label>
+                <input type="number" name="ancien" value="{{index.ancien_index}}" id="ancien" class="form-control">
+            </div>  
+            <div class="form-group">
+                <label for='new'>Ancien Indexe</label>
+                <input type="number" name="new" value="{{index.nouvelle_index}}" id="new" class="form-control">
+            </div>      
+
+{% endblock %}
