@@ -36,7 +36,35 @@
                     
                     <td><a href="/conso/delete/{{c._id}}"><span data-feather="trash-2"></a></td>
                     <td><a href="/conso/edit/{{c._id}}"><span data-feather="edit-2"></a></td>    
-                </tr>    
+                    <td><a href="/conso/edit/{{c._id}}" data-toggle="modal" data-target="#admin-{{c._id}}"><span data-feather="plus"></a></td>    
+                    </tr>
+                    
+                    <div class="modal fade" tabindex="-1" role="dialog" id="admin-{{c._id}}" role="dialog" aria-labelledby="{{c._id}}" aria-hidden="true">     
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form action="/conso/admin/{{c._id}}" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="{{c._id}}">Ajouter <i>{{c.nom_consommateur}}</i> comme Administrateur</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="login">Login</label>
+                                            <input type="text" name="login" value="{{c.nom_consommateur}}" placeholder='Login'  id='login' required='' readonly class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pass">Password</label>
+                                            <input type="password" name="pass" id="pass"placeholder='password' class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button data-dismiss="modal" class="btn btn-default">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                                    </div>
+                                </form>    
+                            </div>
+                        </div>
+                    </div>
+                    
                 {% endfor %}
             </tbody>
         </table>

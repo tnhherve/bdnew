@@ -15,23 +15,22 @@
 
     <div class="col-md-12" style="margin-top: 10px;">    
         <form action="{{endpoint}}" method="POST">
-                <p>{{endpoint}}</p>
             <div class="form-group">
                 <label for='periode'>Période</label>
                 <select name='periode' class="form-control" required>
                     <option value=' disabled selected='>Choisissez de la période</option>
-                    <option value='Janvier-Fevrier'>Janvier-Fevrier</option>
-                    <option value='Fevrier-Mars'>Fevrier-Mars</option>
-                    <option value='Mars-Avril'>Mars-Avrilr</option>
-                    <option value='Avril-Mai'>Avril-Mai</option>
-                    <option value='Mai-Juin'>Mai-Juin</option>
-                    <option value='Juin-Juillet'>Juin-Juillet</option>
-                    <option value='Juillet-Août'>Juillet-Août</option>
-                    <option value='Août-Septembre'>Août-Septembre</option>
-                    <option value='Septembre-Octobre'>Septembre-Octobre</option>
-                    <option value='Octobre-Novembre'>Octobre-Novembre</option>
-                    <option value='Novembre-Decembre'>Novembre-Decembre</option>
-                    <option value='Decembre-Janvier'>Decembre-Janvier</option>
+                    <option value='Janvier'>Janvier-Fevrier</option>
+                    <option value='Fevrier'>Fevrier-Mars</option>
+                    <option value='Mars'>Mars-Avrilr</option>
+                    <option value='Avril'>Avril-Mai</option>
+                    <option value='Mai'>Mai-Juin</option>
+                    <option value='Juin'>Juin-Juillet</option>
+                    <option value='Juillet'>Juillet-Août</option>
+                    <option value='Août'>Août-Septembre</option>
+                    <option value='Septembre'>Septembre-Octobre</option>
+                    <option value='Octobre'>Octobre-Novembre</option>
+                    <option value='Novembre'>Novembre-Decembre</option>
+                    <option value='Decembre'>Decembre-Janvier</option>
                 </select>        
             </div>
             <div class="form-group">
@@ -56,10 +55,10 @@
                     
                 </select>
             </div>
-            <div style="display:none" id="pk">
-                <div class="form-group">
+            <div class="form-group">
+                <div style="display:none" id="pk">    
                     <label for="prix_kwh">Prix du KWH</label>
-                    <input type="number" name="prix_kwh" id="prix_kwh"placeholder='5.0' step='0.01' min='5.00' max='1000.00'  value="{{facture.prix_kwh}}" class="form-control" required>
+                    <input type="number" name="prix_kwh" id="prix_kwh"placeholder='5.0' step='0.01' min='5.00' max='1000.00'  value="{{facture.prix_kwh}}" class="form-control">
                 </div>
             </div>
             <div class="form-group">

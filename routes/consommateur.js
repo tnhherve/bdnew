@@ -2,9 +2,12 @@ let router = require('express').Router();
 let mongoose = require('mongoose');
 let Consommateur = require('../models/Consommateur');
 let Indexe = require('./../models/Indexe'); 
+let Admin = require('./../models/Admin');
+let Conso_admin = require('./../models/conso_admin');
+let passwordHash = require('password-hash');
 
 router.get('/', (req, res)=>{
-    Consommateur.find({}).exec().then(consommateur=>{
+    Consommateur.find({}).then(consommateur=>{
         res.render('consommateurs/index.html',{conso:consommateur});
     }).catch(err=>{
         console.log("Erreur "+err);
@@ -70,4 +73,30 @@ router.delete('/delete/:id', (req, res)=>{
     res.redirect('/conso');
 });
 
+router.post('/admin/:id', (req, res)=>{
+    let id = req.params.id;
+    Conso_admin.find({id_consommateur:id}).then(conso_admin=>{
+        
+        if (conso_admin[0]!=undefined) {
+            console.log(conso_admin[0]);
+            res.redirect('/conso');
+        } else {
+            let admin = new Admin();
+            admin.login = req.body.login;
+            admin.password =  passwordHash.generate(req.body.pass);
+            admin.save();
+            console.log(admin);
+            let date = new Date();
+            let conso_a = new Conso_admin();
+            conso_a.id_consommateur = id;
+            conso_a.id_admin = admin._id;
+            conso_a.date_admin = date;
+            console.log(conso_a);
+            conso_a.save();
+            res.redirect('/home');
+            
+        }
+    });
+    
+});
 module.exports = router;

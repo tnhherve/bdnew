@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Historiques</a></li>
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+        </nav>
+          
+    </div>
+
+    <div class="col-md-12" style="margin-top: 10px;">    
+            <form action="{{endpoint}}" method="post">
+                <div class="form-group">
+                    <label for="periode">Période</label>
+                    <select name='periode' class="form-control" required>
+                        <option value=' disabled selected'>Choisissez de la période</option>
+                    {% for f in factures %}    
+                        <option value='{{f.periode_facture}}'>{{f.periode_facture}}</option>
+                    {% endfor %}    
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Enoyer</button>
+                </div>
+            </form>
+    </div>    
+</main>    
+{% endblock %}

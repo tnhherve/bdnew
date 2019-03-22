@@ -81,7 +81,10 @@ router.post('/:id?', (req, res)=>{
         Facture.date_limite = req.body.date_limite;
         Facture.type_facture = req.body.type_facture;
         Facture.annee_facture = (new Date).getFullYear();
-         Facture.save();
+        //res.json(Facture);
+        console.log(Facture);
+        //Facture.save();
+        console.log(Facture);
     }).then(()=>{
         res.redirect('/fac');
     }).catch(err=>{console.log("Failed add facture: "+err);});

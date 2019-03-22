@@ -29,28 +29,24 @@ router.post('/electricite', (req,res)=>{
                 let prix_kwh = req.body.prix_kwh;
                 let id_facture = req.body.id_facture;
                 let cpt = 0;
+                console.log(facpayer[0]);
                 //Insertion des nouvelles index pour chaque consommateurs
-                for (let i = 0; i < conso.length; i++) {
-                    //console.log("_id:"+ids[i]._id+" ,{$set: {nouvelle_index:"+idc[i]+"}}");
-                    Indexe.update({_id:ids[i]._id}, {$set: {
-                        ancien_index: ids[i].nouvelle_index,
-                        nouvelle_index:idc[i],
-                        difference_index: idc[i]-ids[i].nouvelle_index
-                    }})
-                    .exec()
-                    .then(doc=>{
-                        console.log(doc);
-                    }).catch(err=>{
-                        console.log("Failled update"+err);
-                    });
-                    
-                    for (let i = 0; i < facpayer.length; i++) {
-                        if (facpayer==null || facpayer[i].id_facture._id!=id_facture){    
-                            cpt+=1;
-                        }    
+                if (facpayer[0]==undefined) {
+                    for (let i = 0; i < conso.length; i++) {
+                        Indexe.update({_id:ids[i]._id}, {$set: {
+                            ancien_index: ids[i].nouvelle_index,
+                            nouvelle_index:idc[i],
+                            difference_index: idc[i]-ids[i].nouvelle_index
+                        }})
+                        .exec()
+                        .then(doc=>{
+                            console.log(doc);
+                        }).catch(err=>{
+                            console.log("Failled update"+err);
+                        });  
                     }
-                    console.log(cpt);
-                    if(cpt!=0){
+                    for (let i = 0; i < conso.length; i++) {
+                        //console.log("_id:"+ids[i]._id+" ,{$set: {nouvelle_index:"+idc[i]+"}}");
                         let payer = new Payer({
                             id_consommateur: conso[i]._id,
                             id_facture: id_facture,
@@ -64,9 +60,47 @@ router.post('/electricite', (req,res)=>{
                             console.log("Payer failed: "+err);
                         });
                         
+                    }
+                } else {
+                    for (let i = 0; i < facpayer.length; i++) {
+                        if (facpayer[i].id_facture._id!=id_facture){    
+                            cpt+=1;
+                        }    
+                    }
+                    console.log(cpt);
+                    if(cpt!=0){  
+                        for (let i = 0; i < conso.length; i++) {
+                            Indexe.update({_id:ids[i]._id}, {$set: {
+                                ancien_index: ids[i].nouvelle_index,
+                                nouvelle_index:idc[i],
+                                difference_index: idc[i]-ids[i].nouvelle_index
+                            }})
+                            .exec()
+                            .then(doc=>{
+                                console.log(doc);
+                            }).catch(err=>{
+                                console.log("Failled update"+err);
+                            });  
+                        }      
+                        for (let i = 0; i < conso.length; i++) {
+                            //console.log("_id:"+ids[i]._id+" ,{$set: {nouvelle_index:"+idc[i]+"}}");
+                            let payer = new Payer({
+                                id_consommateur: conso[i]._id,
+                                id_facture: id_facture,
+                                annee: (new Date).getFullYear(),
+                                montant: (idc[i]-ids[i].nouvelle_index)*prix_kwh,
+                                periode: periode
+                            });
+                            payer.save().then(result=>{
+                                console.log(result);
+                            }).catch(err=>{
+                                console.log("Payer failed: "+err);
+                            });            
+                        }
+                    }else{
+                        res.redirect('/fac/add');
                     }    
-                    
-                 }
+                }
                 res.redirect('/index');
             });
         });  
@@ -94,24 +128,15 @@ router.post('/eau', (req,res)=>{
     let montant_bayeur = req.body.bayeur;
     let montant_facture = req.body.montant;
     let periode = req.body.periode;
-    let date_limite = req.body.date_limite;
     let id_facture = req.body.id_facture;
     Payer.find({}).populate('id_facture').then(facpayer=>{
         Consommateur.find({etat:"present"}).then(conso=>{
             Facture.findById({_id:id_facture}).then(fac=>{
-                let factureEau = {
-                    name:'',
-                    nbre:0,
-                    montant:0,
-                    net:0
-                };
                 let cpt = 0;
-                let data =[];
                 let nbre = 0;
                 for (let i = 0; i < conso.length; i++) {
                     nbre += conso[i].nbre;    
                 }
-                let total_montant = 0;
                 let montant = (montant_facture-montant_bayeur)/nbre;
                 for (let i = 0; i < conso.length; i++) {
                                        
@@ -120,7 +145,7 @@ router.post('/eau', (req,res)=>{
                             cpt+=1;
                         }    
                     }
-                    let da = Object.create(factureEau);
+                    
                     if(cpt!=0){
                         let payer = new Payer({
                             id_consommateur: conso[i]._id,
@@ -134,37 +159,10 @@ router.post('/eau', (req,res)=>{
                         }).catch(err=>{
                             console.log("Payer failed: "+err);
                         });
-
-                        da.name = conso[i].nom_consommateur;
-                        da.nbre = conso[i].nbre;
-                        da.montant =  Math.round(montant)*conso[i].nbre;
-                        da.net = Math.round(montant)+50;
-                        total_montant+=da.montant;
-                    }
-                    if (da.name!="") {
-                        data.push(da)
-                    }
+                    }    
                 }
-                let d = new Date(date_limite);
-                if (d.getDate()<10 && d.getMonth()<9)  {
-                    date_limite="0"+d.getDate()+"/0"+(d.getMonth()+1)+"/"+d.getFullYear();
-                }else if(d.getDate()>9 && d.getMonth()<9){
-                    date_limite= d.getDate()+"/0"+(d.getMonth()+1)+"/"+d.getFullYear();
-                }else if(d.getDate()<10 && d.getMonth()>9){
-                    date_limite="0"+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
-                }else{
-                    date_limite=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
-                }
+                res.redirect('/eau');
                 
-                res.render('payer/factureEau.html', {
-                    datas:data,
-                    nbre: nbre,
-                    nbre_chambre: conso.length,
-                    date_limite: date_limite,
-                    montant_facture: montant_facture,
-                    periode: periode,
-                    total_montant: total_montant
-                });
             });
         });  
     });
